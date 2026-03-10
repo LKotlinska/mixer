@@ -1,0 +1,58 @@
+name: Task
+description: Create a task for the mixer project
+title: "[TASK] "
+labels: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the task clearly.
+      placeholder: Create StudentList component that renders Person components.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      description: Choose the estimated difficulty
+      options:
+        - easy
+        - medium
+        - hard
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tags
+    attributes:
+      label: Tags
+      description: Select one or more tags for this issue
+      options:
+        - label: tag:setup
+        - label: tag:frontend
+        - label: tag:backend
+        - label: tag:ui
+        - label: tag:styling
+        - label: tag:data
+        - label: tag:testing
+        - label: tag:docs
+        - label: tag:devops
+        - label: tag:collaboration
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List what must be true for the task to be considered done.
+      placeholder: |
+        - Component exists
+        - Receives props correctly
+        - Renders without errors
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional extra context, links, or implementation ideas.
