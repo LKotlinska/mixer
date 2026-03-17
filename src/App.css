@@ -1,0 +1,65 @@
+@import "tailwindcss";
+#root {
+  min-width: 90vw;
+  min-height: 90vh;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: lightblue;
+  display: flex;
+}
+
+/* 1) Section fills the viewport */
+.layout {
+  height: 90vh; /* full window height */
+  width: 100vw; /* full window width */
+  display: grid;
+
+  /* 2 columns: left 67%, right the rest */
+  grid-template-columns: 67% 33%;
+
+  /* 2 rows on the left: top takes remaining space, bottom is 25% */
+  grid-template-rows: 1fr 25%;
+
+  gap: 1rem; /* optional spacing */
+  box-sizing: border-box;
+  padding: 1rem; /* optional */
+}
+
+.studentList,
+.notPresentList {
+  border-radius: 1rem;
+}
+
+.studentList div {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start; /* wraps nicely from top */
+  gap: 0.75rem; /* space between persons */
+  overflow: auto; /* if lots of people */
+  margin: 1rem;
+}
+
+.person {
+  border: thin solid palevioletred;
+  background-color: beige;
+  border-radius: 0.5rem;
+  color: darkslategray;
+  padding: 0.2rem 3rem 0.2rem 1rem;
+  flex: 1 1 23%;
+  max-width: 20%;
+  min-width: 15%;
+  font-size: 0.75rem;
+}
+.person p {
+  margin-bottom: 0;
+  text-align: left;
+  width: 100%;
+}
+.person span {
+  text-transform: uppercase;
+  color: rgb(124, 121, 121);
+}
+.person h2 {
+  margin-top: 0;
+}
