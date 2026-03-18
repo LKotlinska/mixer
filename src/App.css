@@ -64,3 +64,42 @@
 .person h2 {
   margin-top: 0;
 }
+
+/* Toolbar */
+.toolbar {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Dark mode */
+.layout.dark {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+}
+
+.layout.dark .studentList,
+.layout.dark .notPresentList {
+  background-color: #16213e;
+}
+
+.layout.dark .person {
+  background-color: #0f3460;
+  border-color: #e94560;
+  color: #e0e0e0;
+}
+
+.layout.dark .person span {
+  color: #a0a0b0;
+}
+
+.layout.dark button {
+  background-color: #0f3460;
+  color: #e0e0e0;
+  border-color: #e94560;
+}
+
+.layout.dark button:hover {
+  border-color: #fff;
+}
