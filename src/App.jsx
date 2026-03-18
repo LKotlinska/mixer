@@ -3,50 +3,103 @@ import { Person } from './Person'
 import { StudentList } from './StudentList'
 import { NotPresentList } from './NotPresentList'
 import { MixedList } from './MixedList'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
-  const [students, setStudent] = useState([
-    { id: 1, firstname: "Rune", lastname: "Panda", isPresent: true, groupId: null },
-    { id: 2, firstname: "Laura", lastname: "Kotlinska", isPresent: false, groupId: null },
-    { id: 3, firstname: "Björn", lastname: "Björnsson", isPresent: false, groupId: null },
-    { id: 4, firstname: "Amanda", lastname: "Björk", isPresent: true, groupId: null },
-    { id: 5, firstname: "Fanny", lastname: "Andersson", isPresent: false, groupId: null },
-    { id: 6, firstname: "Jenny", lastname: "Berg", isPresent: false, groupId: null }
-  ])
 
-function togglePresent(id) {
-  const student = students.map((s) => {
+  const [students, setStudents] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  
+  const [mixedStudents, setMixedStudents] = useState([])
 
-    if (s.id === id) {
-      return {...s, isPresent: !s.isPresent}
+  const present = students?.filter(({...student}) => student.isPresent === true);
+  const absent = students?.filter(({...student}) => student.isPresent === false);
+
+  const fetchData = () => {
+    fetch('./src/data/student.json')
+      .then ((response) => response.json())
+      .then ((json) => {
+        setStudents(json.students)
+      })
+      .catch(error => {
+        console.error("Failure")
+        setError("Could not load students data.")
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  // Fetch data on component load
+  useEffect(() => {
+    setLoading(true)
+    fetchData()
+  }, [])
+
+  const groups = mixedStudents.reduce((acc, student) => {
+    const key = student.groupId
+    if(!acc[key]) acc[key] = []
+    acc[key].push(student)
+    return acc
+  }, {})
+
+  function togglePresent(id) {
+    const student = students.map((s) => {
+
+      if (s.id === id) {
+        return {...s, isPresent: !s.isPresent}
+      }
+      return {...s}
+    })
+    setStudents(student);
+  }
+
+  function shuffle(array) {
+    array.sort(() => Math.random() - 0.5)
+    const isOdd = array.length % 2 !== 0;
+    const groups = []
+    let i = 0
+    let groupId = 1
+
+    while (i < array.length) {
+      const isLastThree = isOdd && i === array.length - 3
+      const size = isLastThree ? 3 : 2
+
+      const group = array.slice(i, i+ size).map(student => ({
+        ...student,
+        groupId
+      }))
+      groups.push(...group)
+      i += size
+      groupId++
     }
-    return {...s}
-  })
-  setStudent(student);
-}
 
-
-const present = students.filter(({...student}) => student.isPresent === true);
-const absent = students.filter(({...student}) => student.isPresent === false);
+    setMixedStudents(groups)
+    setStudents(prev => prev.filter(student => !student.isPresent))
+  }
 
   return (
       <section className="layout">
-        <StudentList>
 
-          {present.map(student => (
+        <button onClick={() => console.log("Mixed: ", shuffle(present)) }>Mix students</button>
+
+        <StudentList>
+          {loading && <p>Loading...</p>}
+          {!loading && error && <p>{error}</p>}
+          {!loading && !error &&
+          present?.map(student => (
             <Person
               key={student.id}
               {...student}
               onClickHandler={() => togglePresent(student.id)}
             />
           ))}
-
         </StudentList>
 
         <NotPresentList>
 
-          {absent.map(student => (
+          {absent?.map(student => (
             <Person
               key={student.id}
               {...student}
@@ -56,7 +109,7 @@ const absent = students.filter(({...student}) => student.isPresent === false);
 
         </NotPresentList>
         
-        <MixedList></MixedList>
+        <MixedList groups={groups} />
       </section>
   )
 }

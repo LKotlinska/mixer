@@ -1,0 +1,15 @@
+{
+    "students": [
+    { "id": 1, "firstname": "Rune", "lastname": "Panda", "isPresent": true, "groupId": null },
+    { "id": 2, "firstname": "Laura", "lastname": "Kotlinska", "isPresent": true, "groupId": null },
+    { "id": 3, "firstname": "Björn", "lastname": "Björnsson", "isPresent": true, "groupId": null },
+    { "id": 4, "firstname": "Amanda", "lastname": "Björk", "isPresent": true, "groupId": null },
+    { "id": 5, "firstname": "Fanny", "lastname": "Andersson", "isPresent": true, "groupId": null },
+    { "id": 6, "firstname": "Jenny", "lastname": "Berg", "isPresent": true, "groupId": null },
+    { "id": 7, "firstname": "Anna", "lastname": "Lund", "isPresent": true, "groupId": null },
+    { "id": 8, "firstname": "Mikael", "lastname": "Antonsson", "isPresent": true, "groupId": null },
+    { "id": 9, "firstname": "Pär", "lastname": "Liljeblad", "isPresent": true, "groupId": null },
+    { "id": 10, "firstname": "Therese", "lastname": "Borg", "isPresent": true, "groupId": null },
+    { "id": 11, "firstname": "Bengt", "lastname": "Persson", "isPresent": true, "groupId": null }
+    ]
+}

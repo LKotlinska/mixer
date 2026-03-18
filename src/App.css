@@ -41,14 +41,15 @@
 }
 
 .person {
+  margin: 0.1em;
+  display: inline-block;
   border: thin solid palevioletred;
   background-color: beige;
   border-radius: 0.5rem;
   color: darkslategray;
   padding: 0.2rem 3rem 0.2rem 1rem;
   flex: 1 1 23%;
-  max-width: 20%;
-  min-width: 15%;
+  max-width: 8em;
   font-size: 0.75rem;
 }
 .person p {
