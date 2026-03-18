@@ -1,88 +1,45 @@
+import { useRef } from 'react'
 import './App.css'
 import { Person } from './Person'
 import { StudentList } from './StudentList'
 import { NotPresentList } from './NotPresentList'
 import { MixedList } from './MixedList'
-import { useEffect, useMemo, useState } from 'react'
+import { InputForm } from './InputForm'
+import useStudents from './hooks/useStudents'
 
 function App() {
 
-  const [students, setStudents] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  
-  const [mixedStudents, setMixedStudents] = useState([])
+  const { togglePresent,setStudents, students, absent, present, groups, shuffle, loading, error } = useStudents();
 
-  const present = useMemo(() => students?.filter(({...student}) => student.isPresent), [students])
-  const absent = useMemo(() => students?.filter(({...student}) => !student.isPresent), [students]) 
+  const sectionRef = useRef(null);
+  const btnRef = useRef(null);
+  const isDark = useRef(false);
 
-  const fetchData = () => {
-    fetch('./src/data/student.json')
-      .then ((response) => response.json())
-      .then ((json) => {
-        setStudents(json.students)
-      })
-      .catch(error => {
-        console.error("Failure")
-        setError("Could not load students data.")
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
+  const toggleDark = () => {
+    isDark.current = !isDark.current;
+    sectionRef.current.classList.toggle('dark');
+    btnRef.current.textContent = isDark.current ? '☀ Light' : '☾ Dark';
+  };
 
-  // Fetch data on component load
-  useEffect(() => {
-    setLoading(true)
-    fetchData()
-  }, [])
+  function addPerson(firstname, lastname) {
 
-  const groups = mixedStudents.reduce((acc, student) => {
-    const key = student.groupId
-    if(!acc[key]) acc[key] = []
-    acc[key].push(student)
-    return acc
-  }, {})
-
-  function togglePresent(id) {
-    const student = students.map((s) => {
-
-      if (s.id === id) {
-        return {...s, isPresent: !s.isPresent}
-      }
-      return {...s}
-    })
-    setStudents(student);
-  }
-
-  function shuffle(array) {
-    array.sort(() => Math.random() - 0.5)
-    const isOdd = array.length % 2 !== 0;
-    const groups = []
-    let i = 0
-    let groupId = 1
-
-    while (i < array.length) {
-      const isLastThree = isOdd && i === array.length - 3
-      const size = isLastThree ? 3 : 2
-
-      const group = array.slice(i, i+ size).map(student => ({
-        ...student,
-        groupId
-      }))
-      groups.push(...group)
-      i += size
-      groupId++
+    const newPerson = {
+      id: students.length + 1,
+      firstname: firstname,
+      lastname: lastname
     }
-
-    setMixedStudents(groups)
-    setStudents(prev => prev.filter(student => !student.isPresent))
+    setStudents(prev => [...prev, newPerson])
   }
-
   return (
-      <section className="layout">
+      <section ref={sectionRef} className="layout">
 
-        <button onClick={() => console.log("Mixed: ", shuffle(present)) }>Mix students</button>
+        <div className="toolbar">
+          <button onClick={() => shuffle(present)}>Mix students</button>
+          <button ref={btnRef} className="dark-toggle" onClick={toggleDark}>☾ Dark</button>
+        </div>
+
+        <InputForm onAdd={addPerson}>
+        </InputForm>
 
         <StudentList>
           {loading && <p>Loading...</p>}
