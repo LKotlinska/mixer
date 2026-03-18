@@ -3,7 +3,7 @@ import { Person } from './Person'
 import { StudentList } from './StudentList'
 import { NotPresentList } from './NotPresentList'
 import { MixedList } from './MixedList'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 function App() {
 
@@ -13,8 +13,8 @@ function App() {
   
   const [mixedStudents, setMixedStudents] = useState([])
 
-  const present = students?.filter(({...student}) => student.isPresent === true);
-  const absent = students?.filter(({...student}) => student.isPresent === false);
+  const present = useMemo(() => students?.filter(({...student}) => student.isPresent), [students])
+  const absent = useMemo(() => students?.filter(({...student}) => !student.isPresent), [students]) 
 
   const fetchData = () => {
     fetch('./src/data/student.json')
